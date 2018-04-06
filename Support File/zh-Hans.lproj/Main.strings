@@ -1,0 +1,84 @@
+
+/* Class = "UILabel"; text = "物品名"; ObjectID = "1ws-qJ-zq3"; */
+"1ws-qJ-zq3.text" = "物品名";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "3C6-FY-pTC"; */
+"3C6-FY-pTC.normalTitle" = "Button";
+
+/* Class = "UIButton"; normalTitle = "0"; ObjectID = "BdX-zB-sft"; */
+"BdX-zB-sft.normalTitle" = "0";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "Dlg-2Z-Ppg"; */
+"Dlg-2Z-Ppg.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "添加地点"; ObjectID = "FW3-TW-KPl"; */
+"FW3-TW-KPl.text" = "添加地点";
+
+/* Class = "UITextField"; placeholder = "地点名"; ObjectID = "IiM-J4-sDS"; */
+"IiM-J4-sDS.placeholder" = "地点名";
+
+/* Class = "UIButton"; normalTitle = "0"; ObjectID = "Iyv-Ms-gtF"; */
+"Iyv-Ms-gtF.normalTitle" = "0";
+
+/* Class = "UITextField"; placeholder = "物品名"; ObjectID = "N6w-Qe-wj6"; */
+"N6w-Qe-wj6.placeholder" = "物品名";
+
+/* Class = "UILabel"; text = "Name"; ObjectID = "OWo-ng-EMv"; */
+"OWo-ng-EMv.text" = "Name";
+
+/* Class = "UILabel"; text = "常丢物品"; ObjectID = "OxW-bd-g4S"; */
+"OxW-bd-g4S.text" = "常丢物品";
+
+/* Class = "UIButton"; normalTitle = "0"; ObjectID = "XYV-hz-7KV"; */
+"XYV-hz-7KV.normalTitle" = "0";
+
+/* Class = "UILabel"; text = "在"; ObjectID = "cBh-FN-VjE"; */
+"cBh-FN-VjE.text" = "在";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "dj1-L6-OnA"; */
+"dj1-L6-OnA.normalTitle" = "Button";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "fbd-W1-og6"; */
+"fbd-W1-og6.normalTitle" = "Button";
+
+/* Class = "UIButton"; normalTitle = "1"; ObjectID = "ftu-vV-5iW"; */
+"ftu-vV-5iW.normalTitle" = "1";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "gxj-B6-nLr"; */
+"gxj-B6-nLr.normalTitle" = "Button";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "jse-hB-FkM"; */
+"jse-hB-FkM.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "放 在"; ObjectID = "lKK-3M-ogk"; */
+"lKK-3M-ogk.text" = "放 在";
+
+/* Class = "UINavigationItem"; title = "123"; ObjectID = "lbY-X6-5cn"; */
+"lbY-X6-5cn.title" = "123";
+
+/* Class = "UILabel"; text = "[ 1 / 3 ] "; ObjectID = "npa-44-7li"; */
+"npa-44-7li.text" = "[ 1 / 3 ] ";
+
+/* Class = "UILabel"; text = "添加成功！"; ObjectID = "oBA-HZ-gyb"; */
+"oBA-HZ-gyb.text" = "添加成功！";
+
+/* Class = "UIButton"; normalTitle = "3"; ObjectID = "ptG-Ll-zdH"; */
+"ptG-Ll-zdH.normalTitle" = "3";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "pwD-XA-Lwv"; */
+"pwD-XA-Lwv.normalTitle" = "Button";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "qfG-t9-1bg"; */
+"qfG-t9-1bg.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "添加物品"; ObjectID = "qj9-bA-do6"; */
+"qj9-bA-do6.text" = "添加物品";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "vx4-Y9-a8l"; */
+"vx4-Y9-a8l.normalTitle" = "Button";
+
+/* Class = "UIButton"; normalTitle = "2"; ObjectID = "wx9-HD-FQP"; */
+"wx9-HD-FQP.normalTitle" = "2";
+
+/* Class = "UILabel"; text = "地点"; ObjectID = "ybH-ze-OZp"; */
+"ybH-ze-OZp.text" = "地点";

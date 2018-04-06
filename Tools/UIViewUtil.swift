@@ -7,55 +7,106 @@
 //
 import UIKit
 import Foundation
+import UIKit
+
+@IBDesignable
+class DesignableView: UIView {
+}
+
+@IBDesignable
+class DesignableButton: UIButton {
+}
+
+@IBDesignable
+class DesignableLabel: UILabel {
+}
 
 
-extension UIView{
+
+extension UIView {
+    
     @IBInspectable
-    var cornerRadius:CGFloat {
+    var cornerRadius: CGFloat {
         get {
             return layer.cornerRadius
         }
-        set{
+        set {
             layer.cornerRadius = newValue
         }
     }
+    
     @IBInspectable
-    var shadowRadius:CGFloat {
-        get{
+    var borderWidth: CGFloat {
+        get {
+            return layer.borderWidth
+        }
+        set {
+            layer.borderWidth = newValue
+        }
+    }
+    
+    @IBInspectable
+    var borderColor: UIColor? {
+        get {
+            if let color = layer.borderColor {
+                return UIColor(cgColor: color)
+            }
+            return nil
+        }
+        set {
+            if let color = newValue {
+                layer.borderColor = color.cgColor
+            } else {
+                layer.borderColor = nil
+            }
+        }
+    }
+    
+    @IBInspectable
+    var shadowRadius: CGFloat {
+        get {
             return layer.shadowRadius
         }
-        set{
+        set {
             layer.shadowRadius = newValue
         }
     }
+    
     @IBInspectable
-    var shadowOpacity: Float{
-        get{
+    var shadowOpacity: Float {
+        get {
             return layer.shadowOpacity
         }
-        set{
+        set {
             layer.shadowOpacity = newValue
-        }
-    }
-    @IBInspectable
-    var shadowColor:UIColor? {
-        get{
-            return layer.shadowColor != nil ? UIColor(cgColor: layer.shadowColor!) : nil
-        }
-        set{
-            layer.shadowColor = newValue?.cgColor
         }
     }
     
     @IBInspectable
     var shadowOffset: CGSize {
         get {
-            return  layer.shadowOffset
+            return layer.shadowOffset
         }
-        set{
+        set {
             layer.shadowOffset = newValue
         }
     }
     
+    @IBInspectable
+    var shadowColor: UIColor? {
+        get {
+            if let color = layer.shadowColor {
+                return UIColor(cgColor: color)
+            }
+            return nil
+        }
+        set {
+            if let color = newValue {
+                layer.shadowColor = color.cgColor
+            } else {
+                layer.shadowColor = nil
+            }
+        }
+    }
 }
 

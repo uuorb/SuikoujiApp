@@ -15,14 +15,14 @@ import TransitionTreasury
 import TransitionAnimation
 import LTMorphingLabel
 import SwipeCellKit
+import MRefresh
 
 enum MeowStatu {
     case PAW
     case BODY
 }
 
-class ViewController: UIViewController, UITableViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITableViewDataSource,LTMorphingLabelDelegate ,UIViewControllerTransitioningDelegate, SwipeTableViewCellDelegate, UIViewControllerPreviewingDelegate{
-
+class ViewController: UIViewController, UITableViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITableViewDataSource,LTMorphingLabelDelegate ,UIViewControllerTransitioningDelegate, SwipeTableViewCellDelegate, UIViewControllerPreviewingDelegate, ModalTransitionDelegate{
     var dataModel = DataModel()
 
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
@@ -37,6 +37,7 @@ class ViewController: UIViewController, UITableViewDelegate, UINavigationControl
         return favoriteViewController
     }
     
+    @IBOutlet weak var test: NSLayoutConstraint!
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
         var indexPath = tableView.indexPath(for: previewingContext.sourceView as! UITableViewCell)!
         if (dataModel.anchoredItems[indexPath.section].isPhoto()){
@@ -48,6 +49,7 @@ class ViewController: UIViewController, UITableViewDelegate, UINavigationControl
             navigationController?.tr_pushViewController(favoriteViewController, method: TRPushTransitionMethod.fade)
         }
     }
+
     
     @IBOutlet weak var topView: UIView!
     var meowPlayer: AVAudioPlayer?
@@ -85,6 +87,13 @@ class ViewController: UIViewController, UITableViewDelegate, UINavigationControl
     var control = BetterSegmentedControl()
     var testDataCount = 5
     let tmpLabel = LTMorphingLabel()
+    var tableHeaderView = TableViewHeaderView(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
+    
+
+    @IBOutlet weak var tableviewPullLabel: UILabel!
+    var imagePicker: UIImagePickerController!
+    
+    @IBOutlet weak var tableViewTopConstraint: NSLayoutConstraint!
 
     override func viewWillLayoutSubviews() {
         setShadowWithCorner(addButton)
@@ -92,14 +101,104 @@ class ViewController: UIViewController, UITableViewDelegate, UINavigationControl
         setShadowWithCorner(searchButton)
         setShadowWithCorner(payButton)
     }
+    var tr_presentTransition: TRViewControllerTransitionDelegate?
     
+    func present() {
+        let vc = PayViewController()
+        vc.modalDelegate = self // Don't forget to set modalDelegate
+        tr_presentViewController(vc, method: TRPresentTransitionMethod.twitter, completion: {
+            print("Present finished.")
+        })
+    }
+
+    func handlePullDownSuccess(){
+        self.tableView.stopAnimating()
+    }
+    
+    var flag = false
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offset = tableView.contentOffset
+        if(offset.y < -100){
+            print(offset)
+        }
+        print(flag)
+//
+        if (offset.y < -100){
+            tableView.contentOffset.y = -100
+        }
+        
+        if (flag == false && offset.y <= -100 && scrollView.isDragging){
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            flag = true
+        }
+        
+        if (flag == true && offset.y > -80 && !scrollView.isDragging ){
+            flag = false
+            self.present()
+        }
+    }
+    
+    var indicatorControl: BetterSegmentedControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         dataModel.loadData()
-        for item in dataModel.anchoredItems {
-            print(item.getMarkColor())
+        
+//        let customSubview = UIView(frame: CGRect(x: -10, y: 40, width: 40, height: 4.0))
+//        customSubview.backgroundColor = .black
+//        customSubview.layer.cornerRadius = 2.0
+//        customSubview.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
+//        segmentView.autoresizingMask = [.flexibleWidth]
+//        segmentView.addSubviewToIndicator(customSubview)
+//        segmentView.titles = titles
+//        segmentView.backgroundColor = myBlueColor
+//        segmentView.selectedTitleColor = myBlueColor
+        indicatorControl = BetterSegmentedControl(
+            frame: CGRect(x: 0.0, y: 0, width: view.bounds.width, height: 50.0),
+            titles: titles,
+            index: 0, options: [.backgroundColor(myBlueColor),
+                                .titleColor(.lightGray),
+                                .indicatorViewBorderColor(.white),
+                                .selectedTitleColor(.white),
+                                .bouncesOnChange(false),
+                                .panningDisabled(false)])
+        indicatorControl.autoresizingMask = [.flexibleWidth]
+        let customSubview = UIView(frame: CGRect(x: 0, y: 40, width: 40, height: 4.0))
+        customSubview.backgroundColor = .white
+        customSubview.layer.cornerRadius = 2.0
+        customSubview.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
+        indicatorControl.addSubviewToIndicator(customSubview)
+        topView.addSubview(indicatorControl)
+        
+        
+        
+        
+        
+        
+        let size = CGSize(width: 25.0, height: 25.0)
+
+        let pathConfiguration = PathConfiguration(lineWidth: 3.0,
+                                                  strokeColor: myDarkGrayColor)
+        let pathManager = defaultPathManager(size: size)
+
+        let pullView = MRefreshAnimatableView(frame: CGRect(origin: CGPoint.zero,
+                                                        size: size),
+                                          pathManager: pathManager,
+                                          pathConfiguration: pathConfiguration)
+        
+        let refreshConfiguration = MRefreshConfiguration(heightIncrease: 30.0,
+                                                         animationEndDistanceOffset: 35.0,
+                                                         animationStartDistance: 18.0,
+                                                         contentInsetChangeAnimationDuration: 0.2)
+        tableView.addPullToRefresh(animatable: pullView,
+                                   configuration: refreshConfiguration) {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+                                        self.handlePullDownSuccess()
+                                    })
         }
+        
+        tableView.backgroundColor = .clear
         self.tableView.allowsMultipleSelection = false
         setStatusBarBackgroundColor(color: myBlueColor)
         UIApplication.shared.statusBarStyle = .lightContent
@@ -121,11 +220,34 @@ class ViewController: UIViewController, UITableViewDelegate, UINavigationControl
         
         tableView.backgroundColor = UIColor.groupTableViewBackground
         topView.backgroundColor = myBlueColor
-        segmentView.titles = titles
-        segmentView.backgroundColor = myBlueColor
-        segmentView.selectedTitleColor = myBlueColor
+  
         self.view.backgroundColor = myBlueColor
     }
+    
+    func defaultPathManager(size: CGSize) -> SVGPathManager {
+        let svg1 = "M 176.5,98 C 206.6,98 231,122.41 231,152.53 L 231,273.47 C 231,303.59 206.6,328 176.5,328 146.4,328 122,303.59 122,273.47 L 122,152.53 C 122,122.41 146.4,98 176.5,98 Z M 176.5,98"
+        let svg2 = "M 77,327 C 77,327 127,374 177,374 227,374 277,327 277,327"
+        let svg3 = "M 177.5,373.5 L 177.5,416.5"
+        
+        let firstConfiguration: ConfigurationTime = (time: 0.0,
+                                                     configuration: SVGPathConfiguration(path: svg1,
+                                                                                         timesSmooth: 3,
+                                                                                         drawableFrame: CGRect(origin: CGPoint.zero, size: size)))
+        let secondConfiguration: ConfigurationTime = (time: 0.3,
+                                                      configuration: SVGPathConfiguration(path: svg2,
+                                                                                          timesSmooth: 3,
+                                                                                          drawableFrame: CGRect(origin: CGPoint.zero, size: size)))
+        let thirdConfiguration: ConfigurationTime = (time: 0.3,
+                                                     configuration: SVGPathConfiguration(path: svg3,
+                                                                                         timesSmooth: 3,
+                                                                                         drawableFrame: CGRect(origin: CGPoint.zero, size: size)))
+        
+        let pathManager = try! SVGPathManager(configurationTimes: [firstConfiguration,secondConfiguration,thirdConfiguration],
+                                              shouldScaleAsFirstElement: true)
+        
+        return pathManager
+    }
+
 
         
     override func viewWillAppear(_ animated: Bool) {
@@ -181,7 +303,6 @@ class ViewController: UIViewController, UITableViewDelegate, UINavigationControl
         }
     }
     
-    
     @IBAction func meowClickedListener(_ sender: UIButton) {
         
         let generator = UIImpactFeedbackGenerator(style: .heavy)
@@ -236,7 +357,6 @@ class ViewController: UIViewController, UITableViewDelegate, UINavigationControl
             
             break
         case .PAW:
-            print("PAW")
             break
         }
     }
@@ -256,7 +376,7 @@ class ViewController: UIViewController, UITableViewDelegate, UINavigationControl
     }
     
     func nextInt() -> UInt{
-        nowInt = segmentView.index
+        nowInt = indicatorControl.index
         if (nowInt + 1 > titles.count - 1){
             return 0
         }else{
@@ -264,7 +384,7 @@ class ViewController: UIViewController, UITableViewDelegate, UINavigationControl
         }
     }
     func previousInt() -> UInt{
-        nowInt = segmentView.index
+        nowInt = indicatorControl.index
         if (nowInt == 0){
             return UInt(titles.count - 1)
         }else{
@@ -275,7 +395,7 @@ class ViewController: UIViewController, UITableViewDelegate, UINavigationControl
     @IBAction func nextBtn(_ sender: UIButton) {
         do{
             nowInt = nextInt()
-            try segmentView.setIndex(nowInt)
+            try indicatorControl.setIndex(nowInt)
         }catch{
             
         }
@@ -283,7 +403,7 @@ class ViewController: UIViewController, UITableViewDelegate, UINavigationControl
     @IBAction func backBtn(_ sender: UIButton) {
         do{
             nowInt = previousInt()
-            try segmentView.setIndex(nowInt)
+            try indicatorControl.setIndex(nowInt)
         }catch{
             
         }
@@ -389,25 +509,21 @@ class ViewController: UIViewController, UITableViewDelegate, UINavigationControl
 
             let deleteAction = SwipeAction(style: .destructive, title: "删除") { action, indexPath in
                 // handle action by updating model with deletion
-                self.testDataCount -= 1
                 //view中删除
                 tableView.beginUpdates()
-                //销毁
+//                销毁
                 itemModel.delete()
-                
                 action.fulfill(with: .delete)
-                
                 self.dataModel.anchoredItems.remove(at: indexPath.section)
-                
                 self.tableView.deleteSections(IndexSet(integer: indexPath.section), with: .fade)
-
                 tableView.endUpdates()
                 
                 self.dataModel.saveData()
             }
             
             let modifyAction = SwipeAction(style: .destructive, title: "修改") { action, indexPath in
-                action.hidesWhenSelected = true
+                action.fulfill(with: .reset)
+//                action.hidesWhenSelected = true
             }
             
             let hideClosure: (UIAlertAction) -> Void = { _ in cell.hideSwipe(animated: true) }
@@ -429,28 +545,11 @@ class ViewController: UIViewController, UITableViewDelegate, UINavigationControl
             }
     }
     
-    var defaultOptions = SwipeTableOptions()
-    var buttonStyle: ButtonStyle = .backgroundColor
-
-    enum ButtonStyle {
-        case backgroundColor, circular
-    }
-
     func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
         var options = SwipeTableOptions()
         options.expansionStyle = orientation == .left ? .selection : .fill
-        if orientation == .left{
-            options.maximumButtonWidth = self.view.bounds.width / 9
-            options.minimumButtonWidth = self.view.bounds.width / 9
-        }else{
-            options.maximumButtonWidth = self.view.bounds.width / 7
-            options.minimumButtonWidth = self.view.bounds.width / 7
-
-        }
-        
-        options.buttonSpacing = 1
-        options.backgroundColor = #colorLiteral(red: 0.9467939734, green: 0.9468161464, blue: 0.9468042254, alpha: 1)
-        
+            options.maximumButtonWidth = orientation == .left ? self.view.bounds.width / 8 : self.view.bounds.width / 6
+        options.minimumButtonWidth = orientation == .left ? self.view.bounds.width / 8 : self.view.bounds.width / 6
         return options
     }
 
@@ -520,9 +619,6 @@ class ViewController: UIViewController, UITableViewDelegate, UINavigationControl
     @IBAction func allBtnTouchUp(_ sender: UIButton) {
         sender.backgroundColor = myBlueColor
     }
-    
-    var imagePicker: UIImagePickerController!
-
     //MARK: - Add image to Library
     @objc func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
         if let error = error {

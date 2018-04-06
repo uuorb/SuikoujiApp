@@ -13,7 +13,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
-        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.0) {
+            //code
+            print("1 秒后输出")
+        }
+
         switch shortcutItem.type {
         case "-11.UITouchText.share":
             let items = ["hello 3D Touch"]
