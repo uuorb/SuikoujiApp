@@ -119,16 +119,16 @@ class ViewController: UIViewController, UITableViewDelegate, UINavigationControl
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offset = tableView.contentOffset
-        if(offset.y < -100){
+        if(offset.y < -90){
             print(offset)
         }
         print(flag)
 //
-        if (offset.y < -100){
-            tableView.contentOffset.y = -100
+        if (offset.y < -90){
+            tableView.contentOffset.y = -90
         }
         
-        if (flag == false && offset.y <= -100 && scrollView.isDragging){
+        if (flag == false && offset.y <= -90 && scrollView.isDragging){
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
             flag = true
         }
@@ -145,41 +145,33 @@ class ViewController: UIViewController, UITableViewDelegate, UINavigationControl
         super.viewDidLoad()
         dataModel.loadData()
         
-//        let customSubview = UIView(frame: CGRect(x: -10, y: 40, width: 40, height: 4.0))
-//        customSubview.backgroundColor = .black
-//        customSubview.layer.cornerRadius = 2.0
-//        customSubview.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
 //        segmentView.autoresizingMask = [.flexibleWidth]
 //        segmentView.addSubviewToIndicator(customSubview)
 //        segmentView.titles = titles
 //        segmentView.backgroundColor = myBlueColor
 //        segmentView.selectedTitleColor = myBlueColor
+        
         indicatorControl = BetterSegmentedControl(
             frame: CGRect(x: 0.0, y: 0, width: view.bounds.width, height: 50.0),
             titles: titles,
             index: 0, options: [.backgroundColor(myBlueColor),
-                                .titleColor(.lightGray),
+                                .titleColor(.white),
                                 .indicatorViewBorderColor(.white),
                                 .selectedTitleColor(.white),
                                 .bouncesOnChange(false),
                                 .panningDisabled(false)])
         indicatorControl.autoresizingMask = [.flexibleWidth]
-        let customSubview = UIView(frame: CGRect(x: 0, y: 40, width: 40, height: 4.0))
+        let customSubview = UIView(frame: CGRect(x: 0, y: 40, width: 50, height: 4.0))
         customSubview.backgroundColor = .white
         customSubview.layer.cornerRadius = 2.0
         customSubview.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
         indicatorControl.addSubviewToIndicator(customSubview)
         topView.addSubview(indicatorControl)
         
-        
-        
-        
-        
-        
         let size = CGSize(width: 25.0, height: 25.0)
 
         let pathConfiguration = PathConfiguration(lineWidth: 3.0,
-                                                  strokeColor: myDarkGrayColor)
+                                                  strokeColor: myBlueColor)
         let pathManager = defaultPathManager(size: size)
 
         let pullView = MRefreshAnimatableView(frame: CGRect(origin: CGPoint.zero,
@@ -189,7 +181,7 @@ class ViewController: UIViewController, UITableViewDelegate, UINavigationControl
         
         let refreshConfiguration = MRefreshConfiguration(heightIncrease: 30.0,
                                                          animationEndDistanceOffset: 35.0,
-                                                         animationStartDistance: 18.0,
+                                                         animationStartDistance: 20.0,
                                                          contentInsetChangeAnimationDuration: 0.2)
         tableView.addPullToRefresh(animatable: pullView,
                                    configuration: refreshConfiguration) {
@@ -251,6 +243,8 @@ class ViewController: UIViewController, UITableViewDelegate, UINavigationControl
 
         
     override func viewWillAppear(_ animated: Bool) {
+        dataModel.loadData()
+        self.tableView.reloadData()
         setStatusBarBackgroundColor(color: myBlueColor)
         self.navigationController?.navigationBar.isHidden = true
     }
@@ -332,7 +326,6 @@ class ViewController: UIViewController, UITableViewDelegate, UINavigationControl
     func pawChangeStatu(statu: MeowStatu){
         switch statu {
         case .BODY:
-            UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
             meowPlayer?.play()
 
             self.meowIsHidden = false
@@ -448,7 +441,7 @@ class ViewController: UIViewController, UITableViewDelegate, UINavigationControl
         let numberLabel = cell.viewWithTag(10) as! UILabel
         
         if(itemModel.getIsMark() && itemModel.getMarkColor() == color){
-            itemModel.setMark(false)
+            itemModel.setIsMarked(false)
             UIView.animate(withDuration: 0.5, animations: {
                 let trans1 = CGAffineTransform.init(rotationAngle: 0)
                 markedImageView.transform = trans1.scaledBy(x: 0.5, y: 0.5)
@@ -458,7 +451,7 @@ class ViewController: UIViewController, UITableViewDelegate, UINavigationControl
             }, completion:{_ in })
         }else{
             itemModel.setMarkColor(color: color)
-            itemModel.setMark(true)
+            itemModel.setIsMarked(true)
             numberLabel.alpha = 0
             markedImageView.transform = CGAffineTransform.init(scaleX: 0.001, y: 0.001)
             markedImageView.image = getMarkImageByColor(itemModel.getMarkColor())

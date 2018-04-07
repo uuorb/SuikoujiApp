@@ -33,11 +33,9 @@ import ImagePicker
 
 
 class AddItemsViewController: UIViewController, LTMorphingLabelDelegate,UITextFieldDelegate, NavgationTransitionable, UIImagePickerControllerDelegate , UINavigationControllerDelegate, ImagePickerDelegate{
-    
 
-    
 
-    
+    var dataModel = DataModel()
     enum SelectStatus: Int {
         case None
         case OnlyItem
@@ -49,6 +47,8 @@ class AddItemsViewController: UIViewController, LTMorphingLabelDelegate,UITextFi
     func pop() {
         _ = navigationController?.tr_popViewController()
     }
+    var selectItemName = ""
+    var selectLocalName = ""
     
     //MARK: 测试数据
     let freqItems = ["耳机","钱包","遥控器","外套","袜子","头盔","钥匙","药"]
@@ -125,6 +125,7 @@ class AddItemsViewController: UIViewController, LTMorphingLabelDelegate,UITextFi
         super.viewDidLoad()
         initCamera()
         initColor()
+        dataModel.loadData()
         
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         itemTextField.delegate = self
@@ -136,7 +137,6 @@ class AddItemsViewController: UIViewController, LTMorphingLabelDelegate,UITextFi
         alertLabel.morphingEffect = .pixelate
         titleLabel1.morphingEffect = .pixelate
         titleLabel2.morphingEffect = .pixelate
-
         
         localTextField.delegate = self
         localTextField.returnKeyType = .done
@@ -212,6 +212,7 @@ class AddItemsViewController: UIViewController, LTMorphingLabelDelegate,UITextFi
     func handleFreqBtnClicked(_ sender: ZFRippleButton){
         switch nowStep{
         case .None:
+            selectItemName = (sender.titleLabel?.text!)!
             self.titleLabel1.text = "[ 2 / 3 ] "
             self.titleLabel2.text = "常丢地点"
             UIView.animate(
@@ -246,6 +247,7 @@ class AddItemsViewController: UIViewController, LTMorphingLabelDelegate,UITextFi
             UIView.transition(with: sender, duration: 0.5, options: [.transitionFlipFromRight], animations: nil, completion: nil)
             self.nowStep = .OnlyItem
         case .OnlyItem:
+            selectLocalName = (sender.titleLabel?.text!)!
             self.titleLabel1.text = "[ 3 / 3 ]"
             self.titleLabel2.text = "确认添加"
             UIView.animate(
@@ -269,7 +271,6 @@ class AddItemsViewController: UIViewController, LTMorphingLabelDelegate,UITextFi
             
             
             sender.addGestureRecognizer(photoGesture)
-            
             self.localLabel.text = sender.title(for: .normal)
             self.localLabel.textColor = UIColor.white
             self.localImage.image = #imageLiteral(resourceName: "delete-white")
@@ -281,6 +282,7 @@ class AddItemsViewController: UIViewController, LTMorphingLabelDelegate,UITextFi
             //如果点击了同一个，那么添加成功
             if (sender.backgroundColor ==  myGreenColor){
                 returnInitStatus()
+                addItem(itemName: selectItemName, itemLocal: selectLocalName)
                 showAlert(msg: "添加成功", duration: 0.5, completionFunc: nil)
             }else{
                 //否则的话，把之前的按钮恢复，并确认第二个按钮
@@ -297,6 +299,39 @@ class AddItemsViewController: UIViewController, LTMorphingLabelDelegate,UITextFi
                 freqButtonClicked(sender)
             }
         }
+    }
+    
+    
+    //全都有的
+    func addItem(itemName: String, itemLocal: String,photoUrl: URL,recordUrl: URL){
+        let item = AnchoredItem(itemName: itemName, localName: itemLocal)
+        item.setIsRecorded(true)
+        item.setIsPhotoed(true)
+        item.setPhotoUrl(picUrl: photoUrl)
+        item.setRecordUrl(recordUrl: recordUrl)
+        dataModel.anchoredItems.insert(item, at: 0)
+        dataModel.saveData()
+    }
+    
+    //只有相片的
+    func addItem(itemName: String, itemLocal: String,photoUrl: URL){
+        let item = AnchoredItem(itemName: itemName, localName: itemLocal)
+        item.setIsPhotoed(true)
+        item.setPhotoUrl(picUrl: photoUrl)
+        dataModel.anchoredItems.insert(item, at: 0)
+        dataModel.saveData()
+    }
+
+    //只有录音的
+    func addItem(itemName: String, itemLocal: String,recordUrl: URL){
+        
+    }
+
+    //啥都没的
+    func addItem(itemName: String, itemLocal: String){
+        let item = AnchoredItem(itemName: itemName, localName: itemLocal)
+        dataModel.anchoredItems.insert(item, at: 0)
+        dataModel.saveData()
     }
     
     
@@ -326,9 +361,30 @@ class AddItemsViewController: UIViewController, LTMorphingLabelDelegate,UITextFi
         config.allowMultiplePhotoSelection = false
         config.showsImageCountLabel = true
         
+        
         imagePicker = ImagePickerController(configuration: config)
+        imagePicker.bottomContainer.pickerButton.numberLabel.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(test)))
         imagePicker.delegate = self
         imagePicker.imageLimit = 1
+    }
+    @objc func test(){
+        
+        let alertController = UIAlertController(title: "系统提示",message: "您确定要离开hangge.com吗？", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+        let okAction = UIAlertAction(title: "好的", style: .default, handler: {
+            action in
+            self.imagePicker.dismiss(animated: true, completion: {
+                self.showAlert(msg: "录音", duration: 0.5)
+            })
+        })
+        alertController.addAction(cancelAction)
+        alertController.addAction(okAction)
+        imagePicker.present(alertController, animated: true, completion: nil)
+        
+//        imagePicker.dismiss(animated: true) {
+
+//        }
+        print("test")
     }
     
     //按相册的那个框框
@@ -344,7 +400,6 @@ class AddItemsViewController: UIViewController, LTMorphingLabelDelegate,UITextFi
     func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [UIImage]) {
         imagePicker.dismiss(animated: true, completion: nil)
         showAlert(msg: "添加成功", duration: 0.5 , completionFunc: returnInitStatus())
-        
         let imageView = UIImageView(image: imageAssets[0])
         imageView.transform = CGAffineTransform.init(scaleX: 0.9, y: 0.9)
     }

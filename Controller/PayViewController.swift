@@ -43,8 +43,6 @@ class PayViewController: UIViewController{
     
 //        textLabel = UILabel(frame: CGRect(x: self.view.center.x - 100, y: self.view.center.y + 55, width: 200, height: 50))
         
-        
-        
         let animateView = UIView(frame: CGRect(x: self.view.center.x - 50, y: self.view.center.y - 70, width: 100, height: 100))
        
         leftRound = UIView(frame: CGRect(x: 30 - 10, y: 40 - 10, width: 17, height: 17))
@@ -78,7 +76,6 @@ class PayViewController: UIViewController{
         
         self.view.addSubview(shimmeringView)
         self.view.addSubview(animateView)
-        
     }
     
     @objc func listeningAnimation(){

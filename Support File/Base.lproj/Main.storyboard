@@ -905,7 +905,7 @@
                                 </constraints>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OEX-ku-V56">
-                                <rect key="frame" x="158" y="330" width="45" height="45"/>
+                                <rect key="frame" x="143" y="330" width="45" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="45" id="dRa-A4-Doe"/>
                                     <constraint firstAttribute="width" secondItem="OEX-ku-V56" secondAttribute="height" multiplier="1:1" id="pUt-XN-zmU"/>
@@ -915,24 +915,32 @@
                                     <action selector="typingReturnAction:" destination="sae-ae-pAd" eventType="touchUpInside" id="ajd-Bd-oz3"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bOl-c9-pmL">
+                                <rect key="frame" x="203" y="330" width="45" height="45"/>
+                                <state key="normal" image="record"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="bOl-c9-pmL" firstAttribute="width" secondItem="OEX-ku-V56" secondAttribute="width" id="1Pa-eZ-oRh"/>
                             <constraint firstItem="baZ-F4-vOC" firstAttribute="height" secondItem="NUG-re-Ijq" secondAttribute="height" multiplier="0.11" id="2OG-LW-DZS"/>
                             <constraint firstItem="g0Y-bf-j0g" firstAttribute="bottom" secondItem="OEX-ku-V56" secondAttribute="bottom" constant="292" id="3Wt-EL-aSJ"/>
                             <constraint firstItem="Qct-vR-4Nb" firstAttribute="height" secondItem="crE-5Q-rki" secondAttribute="height" id="6lq-wz-Xy0"/>
                             <constraint firstItem="g0Y-bf-j0g" firstAttribute="bottom" secondItem="XYV-hz-7KV" secondAttribute="bottom" id="Arr-4Z-0G4"/>
+                            <constraint firstItem="bOl-c9-pmL" firstAttribute="height" secondItem="OEX-ku-V56" secondAttribute="height" id="INj-nm-9PE"/>
                             <constraint firstItem="crE-5Q-rki" firstAttribute="width" secondItem="NUG-re-Ijq" secondAttribute="width" multiplier="0.7" id="Ijh-Lb-v9a"/>
                             <constraint firstItem="XYV-hz-7KV" firstAttribute="top" secondItem="kqY-zM-RJk" secondAttribute="bottom" constant="10" id="L2Y-PW-ASi"/>
+                            <constraint firstItem="bOl-c9-pmL" firstAttribute="top" secondItem="OEX-ku-V56" secondAttribute="top" id="LFp-xX-nGw"/>
                             <constraint firstItem="g0Y-bf-j0g" firstAttribute="trailing" secondItem="XYV-hz-7KV" secondAttribute="trailing" id="MYw-12-Eud"/>
                             <constraint firstItem="OEX-ku-V56" firstAttribute="top" secondItem="Qct-vR-4Nb" secondAttribute="bottom" constant="15" id="OI1-bM-bKw"/>
+                            <constraint firstItem="bOl-c9-pmL" firstAttribute="leading" secondItem="OEX-ku-V56" secondAttribute="leading" constant="60" id="Pjj-hM-4Bg"/>
                             <constraint firstItem="9PY-OG-JBu" firstAttribute="centerX" secondItem="NUG-re-Ijq" secondAttribute="centerX" id="Qur-hs-L5k"/>
                             <constraint firstItem="kqY-zM-RJk" firstAttribute="height" secondItem="NUG-re-Ijq" secondAttribute="height" multiplier="0.1" id="RIL-lB-pgC"/>
                             <constraint firstItem="4w4-Mp-IV7" firstAttribute="centerX" secondItem="NUG-re-Ijq" secondAttribute="centerX" id="RcP-DO-fTD"/>
                             <constraint firstItem="9PY-OG-JBu" firstAttribute="width" secondItem="NUG-re-Ijq" secondAttribute="width" multiplier="0.5" id="T8T-X5-aYf"/>
                             <constraint firstItem="4w4-Mp-IV7" firstAttribute="width" secondItem="NUG-re-Ijq" secondAttribute="width" multiplier="0.92" id="TxG-D1-iCB"/>
                             <constraint firstItem="baZ-F4-vOC" firstAttribute="centerX" secondItem="NUG-re-Ijq" secondAttribute="centerX" id="U5H-wI-5sj"/>
-                            <constraint firstItem="OEX-ku-V56" firstAttribute="trailing" secondItem="Qct-vR-4Nb" secondAttribute="centerX" constant="15" id="doe-mN-ur7"/>
+                            <constraint firstItem="OEX-ku-V56" firstAttribute="trailing" secondItem="Qct-vR-4Nb" secondAttribute="centerX" id="doe-mN-ur7"/>
                             <constraint firstItem="9PY-OG-JBu" firstAttribute="centerY" secondItem="NUG-re-Ijq" secondAttribute="centerY" id="fJ7-kl-CpE"/>
                             <constraint firstItem="Qct-vR-4Nb" firstAttribute="centerX" secondItem="NUG-re-Ijq" secondAttribute="centerX" id="gG8-Y1-v5x"/>
                             <constraint firstItem="XYV-hz-7KV" firstAttribute="width" secondItem="NUG-re-Ijq" secondAttribute="width" multiplier="0.2" id="gzp-WL-Uny"/>
@@ -1047,6 +1055,7 @@
         <image name="homepage" width="100" height="100"/>
         <image name="meow" width="145" height="120"/>
         <image name="play" width="100" height="100"/>
+        <image name="record" width="32" height="32"/>
         <image name="search" width="100" height="100"/>
         <image name="star-orange" width="25" height="25"/>
         <image name="voice-white" width="100" height="100"/>

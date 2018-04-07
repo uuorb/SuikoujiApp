@@ -85,19 +85,26 @@ class AnchoredItem :NSObject, NSCoding {
     /*
      Set
      */
-    func setPicUrl(picUrl: URL){
-        self.photoUrl = picUrl
-        self.isPhotoed = true
-    }
     
     func setMarkColor(color: MarkColor){
         self.markColor = color
     }
     
-    func setMark(_ isMark:Bool){
+    func setIsMarked(_ isMark:Bool){
         self.isMarked = isMark
     }
+    func setIsRecorded(_ isRecorded:Bool){
+        self.isRecorded = isRecorded
+    }
     
+    func setPhotoUrl(picUrl: URL){
+        self.photoUrl = picUrl
+    }
+    
+    func setRecordUrl(recordUrl: URL){
+        self.recordUrl = recordUrl
+    }
+
     
     func setIsPhotoed(_ b: Bool){
         self.isPhotoed = b
